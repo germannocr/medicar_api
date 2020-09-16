@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from todo_list_api.models import (
-    Card
+    Especialidade
 )
 
 
 class CardSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Card
+        model = Especialidade
         fields = '__all__'

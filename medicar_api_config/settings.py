@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     'todo_list_api'
 ]
 
+SITE_ID = 1
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

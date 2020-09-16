@@ -37,7 +37,7 @@ from todo_list_api.mappers import (
 @permission_classes([IsAuthenticated])
 def delete_card(request, card_id: int):
     """
-    Delete an existent Card, performing all necessary validations.
+    Delete an existent Especialidade, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
@@ -80,7 +80,7 @@ def delete_card(request, card_id: int):
 @permission_classes([IsAuthenticated])
 def update_card(request, card_id: int):
     """
-    Update an existent Card, performing all necessary validations.
+    Update an existent Especialidade, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
@@ -124,7 +124,7 @@ def update_card(request, card_id: int):
 @permission_classes([IsAuthenticated])
 def add_card(request):
     """
-    Creates a new Card, performing all necessary validations.
+    Creates a new Especialidade, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
@@ -165,7 +165,7 @@ def add_card(request):
 @permission_classes([IsAuthenticated])
 def retrieve_todo_cards(request):
     """
-    Retrieve existent Card with 'todo' status, performing all necessary validations.
+    Retrieve existent Especialidade with 'todo' status, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
@@ -203,7 +203,7 @@ def retrieve_todo_cards(request):
 @permission_classes([IsAuthenticated])
 def retrieve_doing_cards(request):
     """
-    Retrieve existent Card with 'doing' status, performing all necessary validations.
+    Retrieve existent Especialidade with 'doing' status, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
@@ -241,7 +241,7 @@ def retrieve_doing_cards(request):
 @permission_classes([IsAuthenticated])
 def retrieve_done_cards(request):
     """
-    Retrieve existent Card with 'done' status, performing all necessary validations.
+    Retrieve existent Especialidade with 'done' status, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,

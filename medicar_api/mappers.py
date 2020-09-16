@@ -36,13 +36,13 @@ def map_update_response():
 
 def map_post_card_response(serialized_response: ModelSerializer):
     """
-    Returns a response in JSON format with the fields present in the Card model.
+    Returns a response in JSON format with the fields present in the Especialidade model.
 
     #Parameters:
-        serialized_response (ModelSerializer): Serializer created from the Card model
+        serialized_response (ModelSerializer): Serializer created from the Especialidade model
 
     #Returns:
-        (JsonResponse): Dictionary in JSON format with the data of a created object of type Card.
+        (JsonResponse): Dictionary in JSON format with the data of a created object of type Especialidade.
     """
     return JsonResponse(
         {

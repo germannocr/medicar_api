@@ -8,10 +8,10 @@ from todo_list_api.exceptions import (
 
 def validate_card_post_body(request_body: dict):
     """
-    Validates the JSON dictionary sent by the user when creating an Card.
+    Validates the JSON dictionary sent by the user when creating an Especialidade.
 
     #Parameters:
-        request_body (dict): Dictionary in JSON format sent by the user with the fields to create an Card.
+        request_body (dict): Dictionary in JSON format sent by the user with the fields to create an Especialidade.
 
     #Returns:
     """
@@ -50,10 +50,10 @@ def validate_card_post_body(request_body: dict):
 
 def validate_card_patch_body(request_body: dict):
     """
-    Validates the JSON dictionary sent by the user when updating an Card.
+    Validates the JSON dictionary sent by the user when updating an Especialidade.
 
     #Parameters:
-        request_body (dict): Dictionary in JSON format sent by the user with the fields to update an Card.
+        request_body (dict): Dictionary in JSON format sent by the user with the fields to update an Especialidade.
 
     #Returns:
     """
