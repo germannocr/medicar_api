@@ -3,8 +3,8 @@ from rest_framework.serializers import ModelSerializer
 
 from django.http import JsonResponse
 from rest_framework import status
-from todo_list_api.serializers import (
-    CardSerializer
+from medicar_api.serializers import (
+    EspecialidadeSerializer, MedicoSerializer
 )
 
 
@@ -16,7 +16,17 @@ def map_delete_response():
     )
 
 
-def map_get_card_response(serialized_response: CardSerializer):
+def map_get_especialidade_response(serialized_response: EspecialidadeSerializer):
+    return JsonResponse(
+        {
+            'content': serialized_response.data
+        },
+        safe=False,
+        status=status.HTTP_200_OK
+    )
+
+
+def map_get_medico_response(serialized_response: MedicoSerializer):
     return JsonResponse(
         {
             'content': serialized_response.data

@@ -1,8 +1,8 @@
 
-from todo_list_api.exceptions import (
+from medicar_api.exceptions import (
     MissingRequiredFields,
     InvalidFieldType,
-    InvalidFieldValue,
+    InvalidFieldValue, IncorrectQueryParams,
 )
 
 
@@ -77,3 +77,22 @@ def validate_card_patch_body(request_body: dict):
         raise InvalidFieldValue(code=400)
 
     return
+
+
+def validate_especialidade_query_params(query_params: dict):
+    possible_fields = ["search"]
+
+    query_params_keys = query_params.keys()
+
+    for current_query_param in query_params_keys:
+        if current_query_param not in possible_fields:
+            raise IncorrectQueryParams(code=400)
+
+        if not isinstance(query_params.get(current_query_param), str):
+            raise IncorrectQueryParams(code=400)
+
+    query_params_filter = dict(query_params)
+    if "search" in query_params_keys:
+        query_params_filter["name"] = query_params.pop('search')
+
+    return query_params_filter

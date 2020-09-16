@@ -1,4 +1,4 @@
-"""todo_list URL Configuration
+"""medicarApi URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_jwt.views import refresh_jwt_token, obtain_jwt_token
 
-from todo_list_api import views
+from medicar_api import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,8 +29,8 @@ urlpatterns = [
     path('update_card/<int:card_id>/', views.update_card, name='update_card'),
     path('delete_card/<int:card_id>/', views.delete_card, name='delete_card'),
     url(r'^create_card/$', views.add_card, name='create_card'),
-    url(r'^todo_cards/$', views.retrieve_todo_cards, name='todo_cards'),
-    url(r'^doing_cards/$', views.retrieve_doing_cards, name='doing_cards'),
+    url(r'^todo_cards/$', views.retrieve_especialidades, name='todo_cards'),
+    url(r'^doing_cards/$', views.retrieve_medicos, name='doing_cards'),
     url(r'^done_cards/$', views.retrieve_done_cards, name='done_cards'),
 
 ]

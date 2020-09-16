@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class TODOApiConfig(AppConfig):
-    name = 'todo_list_api'
+class MedicarApiConfig(AppConfig):
+    name = 'medicar_api'

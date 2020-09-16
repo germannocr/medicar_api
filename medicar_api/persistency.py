@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.contrib.auth.models import User
-from todo_list_api.models import (
-    Especialidade
+from medicar_api.models import (
+    Especialidade, Medico
 )
 
 
@@ -24,16 +24,16 @@ def update_retrieved_card(retrieved_card: Especialidade, request_body: dict):
     return
 
 
-def retrieve_todo_cards_list(user_id: int):
-    retrieved_card = Especialidade.objects.filter(status='todo', created_by_user=user_id).all()
+def retrieve_especialidades_list(query_params: dict = None):
+    retrieved_especialidades_list = Especialidade.objects.filter(**query_params).all()
 
-    return retrieved_card
+    return retrieved_especialidades_list
 
 
-def retrieve_doing_cards_list(user_id: int):
-    retrieved_card = Especialidade.objects.filter(status='doing', created_by_user=user_id).all()
+def retrieve_medicos_list(query_params: dict = None):
+    retrieved_medicos_list = Medico.objects.filter(**query_params).all()
 
-    return retrieved_card
+    return retrieved_medicos_list
 
 
 def retrieve_done_cards_list(user_id: int):

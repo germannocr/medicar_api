@@ -4,32 +4,32 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
-from todo_list_api.exceptions import CardNotFound
+from medicar_api.exceptions import CardNotFound
 from rest_framework.decorators import (
     api_view,
     permission_classes
 )
-from todo_list_api.serializers import (
-    CardSerializer
+from medicar_api.serializers import (
+    EspecialidadeSerializer, MedicoSerializer
 )
-from todo_list_api.validations import (
+from medicar_api.validations import (
     validate_card_post_body,
-    validate_card_patch_body
+    validate_card_patch_body, validate_especialidade_query_params
 )
-from todo_list_api.persistency import (
+from medicar_api.persistency import (
     create_card,
     retrieve_card_by_id,
     delete_retrieved_card,
     update_retrieved_card,
-    retrieve_todo_cards_list,
-    retrieve_doing_cards_list,
+    retrieve_especialidades_list,
+    retrieve_medicos_list,
     retrieve_done_cards_list
 )
-from todo_list_api.mappers import (
+from medicar_api.mappers import (
     map_post_card_response,
     map_delete_response,
     map_update_response,
-    map_get_card_response
+    map_get_especialidade_response, map_get_medico_response
 )
 
 
@@ -140,7 +140,7 @@ def add_card(request):
         validate_card_post_body(request_body=request_body)
         new_card = create_card(request_body=request_body,
                                request_user=user)
-        serializer_response = CardSerializer(new_card)
+        serializer_response = EspecialidadeSerializer(new_card)
         mapped_response = map_post_card_response(serializer_response)
         return mapped_response
 
@@ -163,23 +163,23 @@ def add_card(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def retrieve_todo_cards(request):
+def retrieve_especialidades(request):
     """
     Retrieve existent Especialidade with 'todo' status, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
-                               passing necessary information to retrieve the card objects list and about the user
-                               who made the request.
+                               passing necessary information to retrieve the card objects list
 
     #Returns:
         [NO CONTENT]
     """
-    user = request.user
+    query_params_filters = request.query_params
+    query_params_filters = validate_especialidade_query_params(query_params_filters)
     try:
-        retrieved_cards_list = retrieve_todo_cards_list(user_id=user.id)
-        serialized_response = CardSerializer(retrieved_cards_list, many=True)
-        response = map_get_card_response(serialized_response=serialized_response)
+        retrieved_especialidades_list = retrieve_especialidades_list(query_params=query_params_filters)
+        serialized_response = EspecialidadeSerializer(retrieved_especialidades_list, many=True)
+        response = map_get_especialidade_response(serialized_response=serialized_response)
         return response
 
     except APIException as custom_exception:
@@ -201,7 +201,7 @@ def retrieve_todo_cards(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def retrieve_doing_cards(request):
+def retrieve_medicos(request):
     """
     Retrieve existent Especialidade with 'doing' status, performing all necessary validations.
 
@@ -213,11 +213,10 @@ def retrieve_doing_cards(request):
     #Returns:
         [NO CONTENT]
     """
-    user = request.user
     try:
-        retrieved_cards_list = retrieve_doing_cards_list(user_id=user.id)
-        serialized_response = CardSerializer(retrieved_cards_list, many=True)
-        response = map_get_card_response(serialized_response=serialized_response)
+        retrieved_medicos_list = retrieve_medicos_list()
+        serialized_response = MedicoSerializer(retrieved_medicos_list, many=True)
+        response = map_get_medico_response(serialized_response=serialized_response)
         return response
 
     except APIException as custom_exception:
@@ -254,8 +253,8 @@ def retrieve_done_cards(request):
     user = request.user
     try:
         retrieved_cards_list = retrieve_done_cards_list(user_id=user.id)
-        serialized_response = CardSerializer(retrieved_cards_list, many=True)
-        response = map_get_card_response(serialized_response=serialized_response)
+        serialized_response = EspecialidadeSerializer(retrieved_cards_list, many=True)
+        response = map_get_especialidade_response(serialized_response=serialized_response)
         return response
 
     except APIException as custom_exception:

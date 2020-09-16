@@ -1,6 +1,13 @@
 from rest_framework.exceptions import APIException
 
 
+class IncorrectQueryParams(APIException):
+    status_code = 400
+    default_detail = "The fields passed in the query params are invalid. The only possible field is 'search' as" \
+                     " the key and the name of a specialty as the value."
+    default_code = "inccorect_query_params"
+
+
 class MissingRequiredFields(APIException):
     status_code = 400
     default_detail = "Missing required field. " \

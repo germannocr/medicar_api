@@ -1,5 +1,5 @@
 """
-WSGI config for todo_list project.
+WSGI config for medicarApi project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'todo_list_api_config.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'medicar_api_config.settings')
 
 application = get_wsgi_application()
