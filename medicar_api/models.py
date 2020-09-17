@@ -45,3 +45,16 @@ class Agenda(models.Model):
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
     dia = models.DateField(auto_now=False, auto_now_add=False)
     horarios = ArrayField(models.CharField(max_length=5))
+
+
+class Consulta(models.Model):
+
+    class Meta:
+        db_table = 'consulta'
+
+    id = models.AutoField(primary_key=True, unique=True)
+    dia = models.DateField(auto_now=False, auto_now_add=False)
+    horario = models.TimeField(auto_now=False, auto_now_add=False)
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
+    data_agendamento = models.DateTimeField(auto_now_add=True)
+    created_by_user = models.IntegerField()
