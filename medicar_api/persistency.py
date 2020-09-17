@@ -1,27 +1,39 @@
-from datetime import datetime
-from django.contrib.auth.models import User
+import datetime
+
+from medicar_api.mappers import retrieve_current_date_and_time
 from medicar_api.models import (
-    Especialidade, Medico
+    Especialidade, Medico, Consulta, Agenda
 )
 
 
-def delete_retrieved_card(retrieved_card: Especialidade):
-    retrieved_card.delete()
+def delete_retrieved_consulta(retrieved_consulta: Consulta):
+    retrieved_consulta.delete()
 
     return
 
 
-def update_retrieved_card(retrieved_card: Especialidade, request_body: dict):
-    if request_body.get('name'):
-        retrieved_card.name = request_body.get('name')
-    if request_body.get('description'):
-        retrieved_card.description = request_body.get('description')
-    if request_body.get('status'):
-        retrieved_card.status = request_body.get('status')
+def retrieve_consulta(consulta_id: int, user_id: int):
+    current_date, current_time = retrieve_current_date_and_time()
+    retrieved_consulta = Consulta.objects.filter(
+        id=consulta_id,
+        created_by_user=user_id,
+        dia__gte=current_date,
+        horario__gte=current_time
+    ).first()
 
-    retrieved_card.save()
+    return retrieved_consulta
 
-    return
+
+def create_consulta(request_body: dict, retrieved_agenda: Agenda, user_id: int):
+
+    created_consulta = Consulta.objects.create(
+        horario=request_body.get('horario'),
+        dia=retrieved_agenda.dia,
+        medico=retrieved_agenda.medico,
+        created_by_user=user_id
+    )
+
+    return created_consulta
 
 
 def retrieve_especialidades_list(query_params: dict = None):
@@ -36,34 +48,31 @@ def retrieve_medicos_list(query_params: dict = None):
     return retrieved_medicos_list
 
 
-def retrieve_done_cards_list(user_id: int):
-    retrieved_card = Especialidade.objects.filter(status='done', created_by_user=user_id).all()
+def retrieve_agendas_list(query_params: dict = None):
+    current_date, current_time = retrieve_current_date_and_time()
 
-    return retrieved_card
+    retrieved_agendas_list = Agenda.objects.filter(dia__gte=current_date, **query_params).all().order_by("-dia")
+
+    existent_consultas_list = Consulta.objects.all(dia__gte=current_date, horario__gte=current_time)
+
+    for current_agenda in retrieved_agendas_list:
+        for current_consulta in existent_consultas_list:
+            if current_consulta.horario in current_agenda.horarios \
+                    and current_consulta.dia == current_agenda.dia \
+                    and current_consulta.medico == current_agenda.medico:
+                current_agenda.horarios.remove(current_consulta.horario)
+        if len(current_agenda.horarios) == 0:
+            retrieved_agendas_list.remove(current_agenda)
+
+    return retrieved_agendas_list
 
 
-def retrieve_card_by_id(card_id: int, user_id: int):
-    retrieved_card = Especialidade.objects.filter(id=card_id, created_by_user=user_id).first()
+def retrieve_consultas_list(user_id: int):
+    current_date, current_time = retrieve_current_date_and_time()
+    retrieved_consultas_list = Consulta.objects.filter(
+        dia__gte=current_date,
+        horario__gte=current_time,
+        created_by_user=user_id
+    ).order_by("-dia -horario").all()
 
-    return retrieved_card
-
-
-def create_card(request_body: dict, request_user: User):
-    """
-    Creates a new object of type Especialidade.
-
-    #Parameters:
-        request_body (dict):Body in JSON format with the necessary fields for creating a new Especialidade.
-        request_user (User):User type object that represents the user who made the request.
-
-    #Returns:
-        created_card (Especialidade):New object of type Especialidade created.
-    """
-    created_card = Especialidade.objects.create(
-        name=request_body.get('name'),
-        description=request_body.get('description'),
-        status=request_body.get('status'),
-        created_by_user=request_user.id
-    )
-
-    return created_card
+    return retrieved_consultas_list
