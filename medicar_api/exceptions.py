@@ -1,11 +1,18 @@
 from rest_framework.exceptions import APIException
 
 
+class AlreadyExistentConsulta(APIException):
+    status_code = 400
+    default_detail = "An Consulta with this information already exists. Please schedule a new Consulta at" \
+                     " another time or day.."
+    default_code = "already_existent_consulta"
+
+
 class IncorrectQueryParams(APIException):
     status_code = 400
     default_detail = "The fields passed in the query params are invalid. The only possible field is 'search' as" \
                      " the key and the name of a specialty as the value."
-    default_code = "inccorect_query_params"
+    default_code = "incorrect_query_params"
 
 
 class MissingRequiredFields(APIException):
