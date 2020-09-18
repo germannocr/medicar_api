@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
-from medicar_api.exceptions import CardNotFound
+from medicar_api.exceptions import ConsultaNotFound
 from rest_framework.decorators import (
     api_view,
     permission_classes
@@ -51,7 +51,7 @@ def delete_consulta(request, consulta_id: int):
 
             return response
         else:
-            raise CardNotFound()
+            raise ConsultaNotFound()
 
     except APIException as custom_exception:
         return JsonResponse({

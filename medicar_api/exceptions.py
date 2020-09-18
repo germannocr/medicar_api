@@ -34,7 +34,7 @@ class InvalidFieldValue(APIException):
     default_code = "incorrect_field_value"
 
 
-class CardNotFound(APIException):
+class ConsultaNotFound(APIException):
     status_code = 404
-    default_detail = "This card doesnt exist."
-    default_code = "card_not_found"
+    default_detail = "This consulta object doesnt exist."
+    default_code = "consulta_not_found"
