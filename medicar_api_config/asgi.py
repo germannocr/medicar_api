@@ -1,5 +1,5 @@
 """
-ASGI config for medicarApi project.
+ASGI config for medicar project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

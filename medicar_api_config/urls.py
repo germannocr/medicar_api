@@ -1,4 +1,4 @@
-"""medicarApi URL Configuration
+"""medicar URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -26,12 +26,11 @@ urlpatterns = [
     url(r'^refresh-token/', refresh_jwt_token),
     url(r'^login/', obtain_jwt_token),
 
-    path('update_card/<int:card_id>/', views.update_card, name='update_card'),
-    path('delete_card/<int:card_id>/', views.delete_card, name='delete_card'),
-    url(r'^create_card/$', views.add_card, name='create_card'),
-    url(r'^todo_cards/$', views.retrieve_especialidades, name='todo_cards'),
-    url(r'^doing_cards/$', views.retrieve_medicos, name='doing_cards'),
-    url(r'^done_cards/$', views.retrieve_done_cards, name='done_cards'),
-
+    path('delete_consulta/<int:consulta_id>/', views.delete_consulta, name='delete_consulta'),
+    url(r'^create_consulta/$', views.add_consulta, name='post_consulta'),
+    url(r'^retrieve_especialidades/$', views.retrieve_especialidades, name='get_especialidades'),
+    url(r'^retrieve_medicos/$', views.retrieve_medicos, name='get_medicos'),
+    url(r'^retrieve_consultas/$', views.retrieve_consultas, name='get_consultas'),
+    url(r'^retrieve_agendas/$', views.retrieve_agendas, name='get_agendas')
 ]
 
