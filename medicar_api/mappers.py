@@ -99,7 +99,6 @@ def map_agenda_query_params(query_params: dict):
 
 def retrieve_current_date_and_time():
     current_date = datetime.date.today()
-    current_time = f"{datetime.datetime.now().hour}:{datetime.datetime.now().minute}"
-    current_time = datetime.datetime.strptime(current_time, '%H:%M')
+    current_time = datetime.time(hour=datetime.datetime.utcnow().hour, minute=datetime.datetime.utcnow().minute)
 
     return current_date, current_time

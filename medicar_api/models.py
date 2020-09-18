@@ -44,7 +44,7 @@ class Agenda(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
     dia = models.DateField(auto_now=False, auto_now_add=False)
-    horarios = ArrayField(models.CharField(max_length=5))
+    horarios = ArrayField(models.TimeField(auto_now_add=False))
 
 
 class Consulta(models.Model):

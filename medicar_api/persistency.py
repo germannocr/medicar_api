@@ -51,9 +51,9 @@ def retrieve_medicos_list(query_params: dict = None):
 def retrieve_agendas_list(query_params: dict = None):
     current_date, current_time = retrieve_current_date_and_time()
 
-    retrieved_agendas_list = Agenda.objects.filter(dia__gte=current_date, **query_params).all().order_by("-dia")
+    retrieved_agendas_list = Agenda.objects.filter(dia__gte=current_date, **query_params).all().order_by("dia")
 
-    existent_consultas_list = Consulta.objects.all(dia__gte=current_date, horario__gte=current_time)
+    existent_consultas_list = Consulta.objects.filter(dia__gte=current_date, horario__gte=current_time).all()
 
     for current_agenda in retrieved_agendas_list:
         for current_consulta in existent_consultas_list:
@@ -61,8 +61,13 @@ def retrieve_agendas_list(query_params: dict = None):
                     and current_consulta.dia == current_agenda.dia \
                     and current_consulta.medico == current_agenda.medico:
                 current_agenda.horarios.remove(current_consulta.horario)
+
+        for current_horario in current_agenda.horarios:
+            if current_horario < current_time:
+                current_agenda.horarios.remove(current_horario)
+
         if len(current_agenda.horarios) == 0:
-            retrieved_agendas_list.remove(current_agenda)
+            retrieved_agendas_list = retrieved_agendas_list.exclude(id=current_agenda.id)
 
     return retrieved_agendas_list
 
@@ -73,6 +78,6 @@ def retrieve_consultas_list(user_id: int):
         dia__gte=current_date,
         horario__gte=current_time,
         created_by_user=user_id
-    ).order_by("-dia -horario").all()
+    ).order_by("dia", "horario").all()
 
     return retrieved_consultas_list
