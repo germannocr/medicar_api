@@ -10,8 +10,8 @@ class AlreadyExistentConsulta(APIException):
 
 class IncorrectQueryParams(APIException):
     status_code = 400
-    default_detail = "The fields passed in the query params are invalid. The only possible field is 'search' as" \
-                     " the key and the name of a specialty as the value."
+    default_detail = "The fields passed in the query params are invalid. Please double check the query params" \
+                     " possibilities and check if the fields were passed correctly.."
     default_code = "incorrect_query_params"
 
 
