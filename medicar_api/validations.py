@@ -1,5 +1,8 @@
 from datetime import datetime
 
+from django.db.models import Q
+from django.http import QueryDict
+
 from medicar_api.exceptions import (
     MissingRequiredFields,
     InvalidFieldType,
@@ -42,9 +45,12 @@ def validate_consulta_post_body(request_body: dict):
     retrieved_agenda = Agenda.objects.filter(id=agenda_id, dia__gte=current_date).first()
 
     if retrieved_agenda:
-        horario = datetime.strptime(horario, '%H:%M')
+        horario = datetime.strptime(horario, '%H:%M').time()
 
         if horario < current_time:
+            raise InvalidFieldValue(code=400)
+
+        if horario not in retrieved_agenda.horarios:
             raise InvalidFieldValue(code=400)
 
     else:
@@ -53,11 +59,14 @@ def validate_consulta_post_body(request_body: dict):
     return retrieved_agenda
 
 
-def validate_already_existent_consulta(request_body: dict, retrieved_agenda: Agenda):
+def validate_already_existent_consulta(request_body: dict, retrieved_agenda: Agenda, user_id: int):
     retrieved_consulta = Consulta.objects.filter(
-        horario=request_body.get('horario'),
-        dia=retrieved_agenda.dia,
-        medico=retrieved_agenda.medico
+        Q(horario=request_body.get('horario'),
+          dia=retrieved_agenda.dia,
+          medico=retrieved_agenda.medico) |
+        Q(horario=request_body.get('horario'),
+          dia=retrieved_agenda.dia,
+          created_by_user=user_id)
     ).first()
 
     if retrieved_consulta:
@@ -104,7 +113,7 @@ def validate_card_patch_body(request_body: dict):
     return
 
 
-def validate_especialidade_query_params(query_params: dict):
+def validate_especialidade_query_params(query_params: QueryDict):
     possible_fields = ["search"]
 
     query_params_keys = query_params.keys()
@@ -116,14 +125,14 @@ def validate_especialidade_query_params(query_params: dict):
         if not isinstance(query_params.get(current_query_param), str):
             raise IncorrectQueryParams(code=400)
 
-    query_params_filter = dict(query_params)
+    query_params_filter = query_params.dict()
     if "search" in query_params_keys:
-        query_params_filter["name"] = query_params.pop('search')
+        query_params_filter["nome"] = query_params_filter.pop('search')
 
     return query_params_filter
 
 
-def validate_medico_query_params(query_params: dict):
+def validate_medico_query_params(query_params: QueryDict):
     possible_fields = ["search", "especialidade"]
 
     query_params_keys = query_params.keys()
@@ -132,9 +141,11 @@ def validate_medico_query_params(query_params: dict):
         if current_query_param not in possible_fields:
             raise IncorrectQueryParams(code=400)
 
-    query_params_filter = dict(query_params)
+    query_params_filter = query_params.dict()
     if "search" in query_params_keys:
-        query_params_filter["name"] = query_params.pop('search')
+        query_params_filter["nome"] = query_params_filter.pop('search')
+    if "especialidade" in query_params_keys:
+        query_params_filter["especialidade"] = query_params.getlist("especialidade")
 
     return query_params_filter
 
@@ -151,12 +162,6 @@ def validate_request_query_params(query_params: dict):
     if 'data_inicio' in query_params_keys and 'data_final' not in query_params_keys:
         raise IncorrectQueryParams(code=400)
 
-    if query_params.get('medico') and not isinstance(query_params.get('medico'), int):
-        raise IncorrectQueryParams(code=400)
-
-    if query_params.get('especialidade') and not isinstance(query_params.get('especialidade'), int):
-        raise IncorrectQueryParams(code=400)
-
     if query_params.get('data_inicio') and query_params.get('data_final'):
         if not isinstance(query_params.get('data_inicio'), str) and isinstance(query_params.get('data_final'), str):
             raise IncorrectQueryParams(code=400)
@@ -166,4 +171,6 @@ def validate_request_query_params(query_params: dict):
             datetime.strptime(query_params.get('data_final'), '%Y-%m-%d')
         except TypeError:
             raise IncorrectQueryParams(code=400)
+
+    return
 

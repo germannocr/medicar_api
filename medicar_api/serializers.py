@@ -12,20 +12,23 @@ class EspecialidadeSerializer(serializers.ModelSerializer):
 
 
 class MedicoSerializer(serializers.ModelSerializer):
+    especialidade = EspecialidadeSerializer(many=False, read_only=True)
 
     class Meta:
         model = Medico
-        fields = '__all__'
+        fields = ['id', 'nome', 'crm', 'email', 'telefone', 'especialidade']
 
 
 class ConsultaSerializer(serializers.ModelSerializer):
+    medico = MedicoSerializer(many=False, read_only=True)
 
     class Meta:
         model = Consulta
-        fields = '__all__'
+        fields = ['id', 'dia', 'horario', 'data_agendamento', 'medico']
 
 
 class AgendaSerializer(serializers.ModelSerializer):
+    medico = MedicoSerializer(many=False, read_only=True)
 
     class Meta:
         model = Agenda

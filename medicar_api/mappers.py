@@ -2,7 +2,7 @@ import datetime
 
 from rest_framework.serializers import ModelSerializer
 
-from django.http import JsonResponse
+from django.http import JsonResponse, QueryDict
 from rest_framework import status
 from medicar_api.serializers import (
     EspecialidadeSerializer, MedicoSerializer, ConsultaSerializer, AgendaSerializer
@@ -76,23 +76,24 @@ def map_post_consulta_response(serialized_response: ModelSerializer):
     )
 
 
-def map_agenda_query_params(query_params: dict):
+def map_agenda_query_params(query_params: QueryDict):
+    query_params_dict = query_params.copy()
     filters_dict = {}
 
-    medico_ids_list = query_params.get('medico', None)
+    medico_ids_list = query_params_dict.pop('medico', None)
     if medico_ids_list:
-        filters_dict['medico__id__in']: medico_ids_list
+        filters_dict['medico__id__in'] = medico_ids_list
 
-    especialidade_ids_list = query_params.get('especialidade', None)
+    especialidade_ids_list = query_params_dict.pop('especialidade', None)
     if especialidade_ids_list:
-        filters_dict['medico__especialidade__id__in']: especialidade_ids_list
+        filters_dict['medico__especialidade__id__in'] = especialidade_ids_list
 
     initial_date = query_params.get('data_inicio', None)
 
     final_date = query_params.get('data_final', None)
 
     if initial_date and final_date:
-        filters_dict['dia__range']: [initial_date, final_date]
+        filters_dict['dia__range'] = [initial_date, final_date]
 
     return filters_dict
 
@@ -102,3 +103,26 @@ def retrieve_current_date_and_time():
     current_time = datetime.time(hour=datetime.datetime.utcnow().hour, minute=datetime.datetime.utcnow().minute)
 
     return current_date, current_time
+
+
+def remove_past_horario_from_list(retrieved_agendas_list: list, existent_consultas_list: list,
+                                  current_time: datetime.time):
+
+    for current_agenda in retrieved_agendas_list:
+        horario_list = []
+        for current_consulta in existent_consultas_list:
+            if current_consulta.horario in current_agenda.horarios \
+                    and current_consulta.dia == current_agenda.dia \
+                    and current_consulta.medico == current_agenda.medico:
+                current_agenda.horarios.remove(current_consulta.horario)
+
+        for current_horario in current_agenda.horarios:
+            if current_horario > current_time:
+                horario_list.append(current_horario)
+
+        current_agenda.horarios = horario_list
+
+        if len(horario_list) == 0:
+            retrieved_agendas_list = retrieved_agendas_list.exclude(id=current_agenda.id)
+
+    return retrieved_agendas_list
