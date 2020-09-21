@@ -88,7 +88,10 @@ def add_consulta(request):
     user = request.user
     try:
         retrieved_agenda = validate_consulta_post_body(request_body=request_body)
-        validate_already_existent_consulta(request_body=request_body, retrieved_agenda=retrieved_agenda)
+        validate_already_existent_consulta(
+            request_body=request_body,
+            retrieved_agenda=retrieved_agenda,
+            user_id=user.id)
         new_consulta = create_consulta(
             request_body=request_body,
             retrieved_agenda=retrieved_agenda,

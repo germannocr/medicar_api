@@ -1,6 +1,6 @@
 import datetime
 
-from medicar_api.mappers import retrieve_current_date_and_time
+from medicar_api.mappers import retrieve_current_date_and_time, remove_past_horario_from_list
 from medicar_api.models import (
     Especialidade, Medico, Consulta, Agenda
 )
@@ -43,7 +43,13 @@ def retrieve_especialidades_list(query_params: dict = None):
 
 
 def retrieve_medicos_list(query_params: dict = None):
-    retrieved_medicos_list = Medico.objects.filter(**query_params).all()
+    if "especialidade" in query_params:
+        retrieved_medicos_list = Medico.objects.filter(
+            especialidade__id__in=query_params.pop("especialidade"),
+            **query_params
+        ).all()
+    else:
+        retrieved_medicos_list = Medico.objects.filter(**query_params).all()
 
     return retrieved_medicos_list
 
@@ -55,19 +61,11 @@ def retrieve_agendas_list(query_params: dict = None):
 
     existent_consultas_list = Consulta.objects.filter(dia__gte=current_date, horario__gte=current_time).all()
 
-    for current_agenda in retrieved_agendas_list:
-        for current_consulta in existent_consultas_list:
-            if current_consulta.horario in current_agenda.horarios \
-                    and current_consulta.dia == current_agenda.dia \
-                    and current_consulta.medico == current_agenda.medico:
-                current_agenda.horarios.remove(current_consulta.horario)
-
-        for current_horario in current_agenda.horarios:
-            if current_horario < current_time:
-                current_agenda.horarios.remove(current_horario)
-
-        if len(current_agenda.horarios) == 0:
-            retrieved_agendas_list = retrieved_agendas_list.exclude(id=current_agenda.id)
+    retrieved_agendas_list = remove_past_horario_from_list(
+        retrieved_agendas_list=retrieved_agendas_list,
+        existent_consultas_list=existent_consultas_list,
+        current_time=current_time
+    )
 
     return retrieved_agendas_list
 
