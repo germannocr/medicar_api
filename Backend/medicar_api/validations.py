@@ -21,8 +21,6 @@ def validate_consulta_post_body(request_body: dict):
 
     #Returns:
     """
-    agenda_id = request_body.get('agenda_id')
-    horario = request_body.get('horario')
     required_fields = [
         'agenda_id',
         'horario'
@@ -33,6 +31,9 @@ def validate_consulta_post_body(request_body: dict):
     for current_required_field in required_fields:
         if current_required_field not in request_fields:
             raise MissingRequiredFields(code=400)
+
+    agenda_id = request_body.get('agenda_id')
+    horario = request_body.get('horario')
 
     if not isinstance(agenda_id, int):
         raise InvalidFieldType(code=400)
@@ -143,7 +144,7 @@ def validate_medico_query_params(query_params: QueryDict):
 
     query_params_filter = query_params.dict()
     if "search" in query_params_keys:
-        query_params_filter["nome"] = query_params_filter.pop('search')
+        query_params_filter["nome__contains"] = query_params_filter.pop('search')
     if "especialidade" in query_params_keys:
         query_params_filter["especialidade"] = query_params.getlist("especialidade")
 

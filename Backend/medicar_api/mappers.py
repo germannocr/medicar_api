@@ -140,5 +140,8 @@ def remove_invalid_horario_from_list(
                 retrieved_agendas_list = retrieved_agendas_list.exclude(id=current_agenda.id)
             else:
                 filtered_agenda_list.append(current_agenda)
+        elif len(current_agenda.horarios) > 0:
+            # If all times on an Agenda are already filled, the Agenda is not listed.
+            filtered_agenda_list.append(current_agenda)
 
     return filtered_agenda_list
