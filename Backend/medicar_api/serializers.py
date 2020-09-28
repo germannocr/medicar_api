@@ -1,10 +1,17 @@
 from rest_framework import serializers
 from medicar_api.models import (
-    Especialidade, Medico, Consulta, Agenda
+    Especialidade,
+    Medico,
+    Consulta,
+    Agenda
 )
 
 
 class EspecialidadeSerializer(serializers.ModelSerializer):
+    """
+    Especialidade Serializer responsible for mapping existing Especialidade objects to dictionaries,
+    making it possible to map responses.
+    """
 
     class Meta:
         model = Especialidade
@@ -12,6 +19,10 @@ class EspecialidadeSerializer(serializers.ModelSerializer):
 
 
 class MedicoSerializer(serializers.ModelSerializer):
+    """
+    Medico Serializer responsible for mapping existing Medico objects to dictionaries,
+    making it possible to map responses.
+    """
     especialidade = EspecialidadeSerializer(many=False, read_only=True)
 
     class Meta:
@@ -20,6 +31,10 @@ class MedicoSerializer(serializers.ModelSerializer):
 
 
 class ConsultaSerializer(serializers.ModelSerializer):
+    """
+    Consulta Serializer responsible for mapping existing Consulta objects to dictionaries,
+    making it possible to map responses.
+    """
     medico = MedicoSerializer(many=False, read_only=True)
 
     class Meta:
@@ -28,6 +43,10 @@ class ConsultaSerializer(serializers.ModelSerializer):
 
 
 class AgendaSerializer(serializers.ModelSerializer):
+    """
+    Agenda Serializer responsible for mapping existing Agenda objects to dictionaries,
+    making it possible to map responses.
+    """
     medico = MedicoSerializer(many=False, read_only=True)
     horarios = serializers.ListField(child=serializers.TimeField(format='%H:%M'))
 

@@ -1,15 +1,32 @@
 import datetime
 
+from rest_framework import status
 from rest_framework.serializers import ModelSerializer
 
-from django.http import JsonResponse, QueryDict
-from rest_framework import status
+from django.http import (
+    JsonResponse,
+    QueryDict
+)
 from medicar_api.serializers import (
-    EspecialidadeSerializer, MedicoSerializer, ConsultaSerializer, AgendaSerializer
+    EspecialidadeSerializer,
+    MedicoSerializer,
+    ConsultaSerializer,
+    AgendaSerializer
 )
 
 
 def map_get_especialidade_response(serialized_response: EspecialidadeSerializer):
+    """
+    Maps the response to the search for existing Especialidade's.
+
+    #Parameters:
+        serialized_response (EspecialidadeSerializer): EspecialidadeSerializer type object that represents the objects
+        searched in the database in dictionary form (key: value).
+
+    #Returns:
+        JsonResponse: Object of type JsonResponse with a dictionary containing the search response and an HTTP code
+         related to the result of the request.
+    """
     return JsonResponse(
         {
             'content': serialized_response.data
@@ -20,6 +37,12 @@ def map_get_especialidade_response(serialized_response: EspecialidadeSerializer)
 
 
 def map_delete_response():
+    """
+    Maps the response to the search for existing specialties.
+
+    #Returns:
+        JsonResponse [NO-CONTENT]: Object of type JsonResponse with an HTTP code related to the result of the request.
+    """
     return JsonResponse(
         {},
         safe=False,
@@ -28,6 +51,17 @@ def map_delete_response():
 
 
 def map_get_medico_response(serialized_response: MedicoSerializer):
+    """
+    Maps the response to the search for existing Medico's.
+
+    #Parameters:
+        serialized_response (MedicoSerializer): MedicoSerializer type object that represents the objects
+        searched in the database in dictionary form (key: value).
+
+    #Returns:
+        JsonResponse: Object of type JsonResponse with a dictionary containing the search response and an HTTP code
+        related to the result of the request.
+    """
     return JsonResponse(
         {
             'content': serialized_response.data
@@ -38,6 +72,17 @@ def map_get_medico_response(serialized_response: MedicoSerializer):
 
 
 def map_get_agenda_response(serialized_response: AgendaSerializer):
+    """
+    Maps the response to the search for existing Agenda's.
+
+    #Parameters:
+        serialized_response (AgendaSerializer): AgendaSerializer type object that represents the objects
+        searched in the database in dictionary form (key: value).
+
+    #Returns:
+        JsonResponse: Object of type JsonResponse with a dictionary containing the search response and an HTTP code
+        related to the result of the request.
+    """
     return JsonResponse(
         {
             'content': serialized_response.data
@@ -48,6 +93,17 @@ def map_get_agenda_response(serialized_response: AgendaSerializer):
 
 
 def map_get_consulta_response(serialized_response: ConsultaSerializer):
+    """
+    Maps the response to the search for existing Consulta's.
+
+    #Parameters:
+        serialized_response (ConsultaSerializer): ConsultaSerializer type object that represents the objects
+        searched in the database in dictionary form (key: value).
+
+    #Returns:
+        JsonResponse: Object of type JsonResponse with a dictionary containing the search response and an HTTP code
+        related to the result of the request.
+    """
     return JsonResponse(
         {
             'content': serialized_response.data
@@ -59,13 +115,15 @@ def map_get_consulta_response(serialized_response: ConsultaSerializer):
 
 def map_post_consulta_response(serialized_response: ModelSerializer):
     """
-    Returns a response in JSON format with the fields present in the Especialidade model.
+    Maps the response for Consulta's creation.
 
     #Parameters:
-        serialized_response (ModelSerializer): Serializer created from the Especialidade model
+        serialized_response (ModelSerializer): ModelSerializer type object that represents the objects created in the
+        database in dictionary form (key: value).
 
     #Returns:
-        (JsonResponse): Dictionary in JSON format with the data of a created object of type Especialidade.
+        JsonResponse: Object of type JsonResponse with a dictionary containing the creation response and an HTTP code
+        related to the result of the request.
     """
     return JsonResponse(
         {
@@ -77,6 +135,16 @@ def map_post_consulta_response(serialized_response: ModelSerializer):
 
 
 def map_agenda_query_params(query_params: QueryDict):
+    """
+    Maps the passed query params to search filters for objects of type Agenda.
+
+    #Parameters:
+        query_params (QueryDict): Query parameters dictionaries, generated from the parameters and values
+        passed in the request url.
+
+    #Returns:
+        filters_dict (Dict): Dictionary with mapped search filters, created from given parameters and values.
+    """
     query_params_dict = query_params.copy()
     filters_dict = {}
 
@@ -99,6 +167,13 @@ def map_agenda_query_params(query_params: QueryDict):
 
 
 def retrieve_current_date_and_time():
+    """
+    Returns the current time and day, in Time and Date formats respectively.
+
+    #Returns:
+        current_date (Date): Current time, in datetime Time format.
+        current_time (Time): Current date, in datetime date format.
+    """
     current_date = datetime.date.today()
     current_time = datetime.time(hour=datetime.datetime.utcnow().hour, minute=datetime.datetime.utcnow().minute)
 
@@ -112,6 +187,19 @@ def remove_invalid_horario_from_list(
         current_date: datetime.date,
         user_id: int
 ):
+    """
+    Removes times considered invalid for listing Agenda's, such as past times and days, as well as times already filled.
+
+    #Parameters:
+        retrieved_agendas_list (list): List of existing Agenda type objects.
+        existent_consultas_list (list): List of existing Consulta type objects.
+        current_time (Time): Current time, in Time format.
+        current_date (Date): Current date, in Date format.
+        user_id (int): Unique identifier of the user responsible for the request.
+
+    #Returns:
+        filtered_agenda_list (list): List of objects of type Agenda, mapped only with the available and future times.
+    """
     filtered_agenda_list = []
     for current_agenda in retrieved_agendas_list:
         horario_list = []

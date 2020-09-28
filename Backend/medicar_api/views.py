@@ -31,12 +31,13 @@ from medicar_api.mappers import (
 @permission_classes([IsAuthenticated])
 def delete_consulta(request, consulta_id: int):
     """
-    Delete an existent Especialidade, performing all necessary validations.
+    Delete an existent Consulta, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
                                passing necessary information to delete the object and about the user
                                who made the request.
+        consulta_id (int): Consulta object unique identifier.
 
     #Returns:
         [NO CONTENT]
@@ -74,7 +75,7 @@ def delete_consulta(request, consulta_id: int):
 @permission_classes([IsAuthenticated])
 def add_consulta(request):
     """
-    Creates a new Especialidade, performing all necessary validations.
+    Creates a new Consulta, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
@@ -122,14 +123,14 @@ def add_consulta(request):
 @permission_classes([IsAuthenticated])
 def retrieve_especialidades(request):
     """
-    Retrieve existent Especialidade with 'todo' status, performing all necessary validations.
+    Retrieve all existent Especialidade objects, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
-                               passing necessary information to retrieve the card objects list
+                               passing necessary information to retrieve the Especialidade objects list
 
     #Returns:
-        [NO CONTENT]
+        response (JSON Response): Response, in JSON format, with the information of the Especialidade objects list.
     """
     query_params_filters = request.query_params
     query_params_filters = validate_especialidade_query_params(query_params_filters)
@@ -160,15 +161,14 @@ def retrieve_especialidades(request):
 @permission_classes([IsAuthenticated])
 def retrieve_medicos(request):
     """
-    Retrieve existent Especialidade with 'doing' status, performing all necessary validations.
+    Retrieve all existent Medico objects, performing all necessary validations.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
-                               passing necessary information to retrieve the card objects list and about the user
-                               who made the request.
+                               passing necessary information to retrieve the Medico objects list
 
     #Returns:
-        [NO CONTENT]
+        response (JSON Response): Response, in JSON format, with the information of the Medico objects list.
     """
     query_params_filters = request.query_params
     query_params_filters = validate_medico_query_params(query_params_filters)
@@ -199,15 +199,15 @@ def retrieve_medicos(request):
 @permission_classes([IsAuthenticated])
 def retrieve_consultas(request):
     """
-    Retrieve existent Especialidade with 'done' status, performing all necessary validations.
+    Retrieve all existent Consulta objects, performing all necessary validations related to scheduled and past day and
+     time.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
-                               passing necessary information to retrieve the card objects list and about the user
-                               who made the request.
+                                passing necessary information to retrieve the Consulta objects list
 
     #Returns:
-        [NO CONTENT]
+        response (JSON Response): Response, in JSON format, with the information of the Consulta objects list.
     """
     user = request.user
     try:
@@ -237,15 +237,15 @@ def retrieve_consultas(request):
 @permission_classes([IsAuthenticated])
 def retrieve_agendas(request):
     """
-    Retrieve existent Especialidade with 'done' status, performing all necessary validations.
+    Retrieve all existent Agenda objects, performing all necessary validations related to schedules and past days and
+    time.
 
     #Parameters:
         request (WSGIRequest): WSGIRequest type object which represents the request made by the user,
-                               passing necessary information to retrieve the card objects list and about the user
-                               who made the request.
+                                passing necessary information to retrieve the Agenda objects list
 
     #Returns:
-        [NO CONTENT]
+        response (JSON Response): Response, in JSON format, with the information of the Agenda objects list.
     """
     user = request.user
     query_params = request.query_params

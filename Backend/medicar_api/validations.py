@@ -1,25 +1,32 @@
 from datetime import datetime
 
-from django.db.models import Q
 from django.http import QueryDict
+from django.db.models import Q
 
+from medicar_api.mappers import retrieve_current_date_and_time
 from medicar_api.exceptions import (
     MissingRequiredFields,
     InvalidFieldType,
-    InvalidFieldValue, IncorrectQueryParams, AlreadyExistentConsulta,
+    InvalidFieldValue,
+    IncorrectQueryParams,
+    AlreadyExistentConsulta
 )
-from medicar_api.mappers import retrieve_current_date_and_time
-from medicar_api.models import Agenda, Consulta
+from medicar_api.models import (
+    Agenda,
+    Consulta
+)
 
 
 def validate_consulta_post_body(request_body: dict):
     """
-    Validates the JSON dictionary sent by the user when creating an Especialidade.
+    Validates the JSON dictionary sent by the user when creating an Consulta.
 
     #Parameters:
-        request_body (dict): Dictionary in JSON format sent by the user with the fields to create an Especialidade.
+        request_body (dict): Dictionary in JSON format sent by the user with the fields to create a Consulta object.
 
     #Returns:
+        retrieved_agenda(Agenda): Agenda object that has the unique identifier passed by the user in the creation
+        request.
     """
     required_fields = [
         'agenda_id',
@@ -61,6 +68,15 @@ def validate_consulta_post_body(request_body: dict):
 
 
 def validate_already_existent_consulta(request_body: dict, retrieved_agenda: Agenda, user_id: int):
+    """
+    Validates the existence of Consulta objects based on an Agenda and time passed by the user.
+
+    #Parameters:
+        request_body (dict): Dictionary in JSON format sent by the user with the fields to create a Consulta object.
+        retrieved_agenda(Agenda): Agenda object that has the unique identifier passed by the user in the creation
+        request.
+        user_id (int): Unique identifier related to the User responsible for the request.
+    """
     retrieved_consulta = Consulta.objects.filter(
         Q(horario=request_body.get('horario'),
           dia=retrieved_agenda.dia,
@@ -77,44 +93,29 @@ def validate_already_existent_consulta(request_body: dict, retrieved_agenda: Age
 
 
 def validate_consulta_identifier(consulta_id: int):
+    """
+    Validates the Consulta identifier sent by the user when deleting an Consulta.
+
+    #Parameters:
+        consulta_id (int): Consulta object unique identifier.
+
+    """
     if not isinstance(consulta_id, int) or consulta_id <= 0:
         raise InvalidFieldValue(code=400)
 
     return
 
 
-def validate_card_patch_body(request_body: dict):
+def validate_especialidade_query_params(query_params: QueryDict):
     """
-    Validates the JSON dictionary sent by the user when updating an Especialidade.
+    Validates the query parameters passed in the search for existing Especialidade type objects.
 
     #Parameters:
-        request_body (dict): Dictionary in JSON format sent by the user with the fields to update an Especialidade.
+        query_params (QueryDict): Dictionary created from the query parameters passed by the user in the request url.
 
     #Returns:
+        query_params_filter(dict): Dictionary with validated and mapped filters to search for Especialidade objects.
     """
-
-    possible_status = [
-        'todo',
-        'doing',
-        'done'
-    ]
-
-    if request_body.get('name') and not isinstance(request_body.get('name'), str):
-        raise InvalidFieldType(code=400)
-
-    if request_body.get('description') and not isinstance(request_body.get('description'), str):
-        raise InvalidFieldType(code=400)
-
-    if  request_body.get('status') and not isinstance(request_body.get('status'), str):
-        raise InvalidFieldType(code=400)
-
-    if request_body.get('status') not in possible_status:
-        raise InvalidFieldValue(code=400)
-
-    return
-
-
-def validate_especialidade_query_params(query_params: QueryDict):
     possible_fields = ["search"]
 
     query_params_keys = query_params.keys()
@@ -134,6 +135,15 @@ def validate_especialidade_query_params(query_params: QueryDict):
 
 
 def validate_medico_query_params(query_params: QueryDict):
+    """
+    Validates the query parameters passed in the search for existing Medico type objects.
+
+    #Parameters:
+        query_params (QueryDict): Dictionary created from the query parameters passed by the user in the request url.
+
+    #Returns:
+        query_params_filter(dict): Dictionary with validated and mapped filters to search for Medico objects.
+    """
     possible_fields = ["search", "especialidade"]
 
     query_params_keys = query_params.keys()
@@ -152,6 +162,13 @@ def validate_medico_query_params(query_params: QueryDict):
 
 
 def validate_request_query_params(query_params: dict):
+    """
+    Validates the query parameters passed in the search for existing Agenda type objects.
+
+    #Parameters:
+        query_params (QueryDict): Dictionary created from the query parameters passed by the user in the request url.
+
+    """
     possible_fields = ['medico', 'especialidade', 'data_inicio', 'data_final']
 
     query_params_keys = query_params.keys()
@@ -174,4 +191,3 @@ def validate_request_query_params(query_params: dict):
             raise IncorrectQueryParams(code=400)
 
     return
-

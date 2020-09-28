@@ -1,10 +1,10 @@
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class Especialidade(models.Model):
     """
-    The Especialidade represents a task.
+    The Especialidade represents a medical specialty.
     """
     id = models.AutoField(primary_key=True, unique=True)
     nome = models.CharField(max_length=60)
@@ -15,7 +15,7 @@ class Especialidade(models.Model):
 
 class Medico(models.Model):
     """
-    The Especialidade represents a task.
+    The Medico represents a doctor.
     """
     id = models.AutoField(primary_key=True, unique=True)
     nome = models.CharField(max_length=60)
@@ -30,7 +30,7 @@ class Medico(models.Model):
 
 class Agenda(models.Model):
     """
-    The Especialidade represents a task.
+    The Agenda represents a medical schedule.
     """
     id = models.AutoField(primary_key=True, unique=True)
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
@@ -42,6 +42,9 @@ class Agenda(models.Model):
 
 
 class Consulta(models.Model):
+    """
+    The Consulta represents a medical appointment.
+    """
     id = models.AutoField(primary_key=True, unique=True)
     dia = models.DateField(auto_now=False, auto_now_add=False)
     horario = models.TimeField(auto_now=False, auto_now_add=False)
