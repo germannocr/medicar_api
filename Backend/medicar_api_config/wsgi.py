@@ -1,5 +1,5 @@
 """
-WSGI config for medicar project.
+WSGI config for Medicar project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
