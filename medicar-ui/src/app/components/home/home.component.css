@@ -1,0 +1,112 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.container {
+    margin-top: 30px;
+    width: 90%;
+}
+
+.list-consulta {
+    margin-bottom: 50px;
+}
+
+#navbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+#logo {
+    width: 150px;
+    margin: 18px 0;
+}
+
+#navbar-nav {
+    width: 40%;
+    margin: 30px 0 25px 0;
+}
+
+.nav-item {
+    display: inline;
+    margin-left: 40px;
+}
+
+.item-link {
+    text-decoration: none;
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 15px;
+    text-align: center;
+}
+
+#profile-name {
+    color: #A8A8A8;
+}
+
+#logout {
+    color: #49B4BB;
+}
+
+#consulta-header {
+
+    display: flex;
+    justify-content: space-between;
+}
+
+#table-title {
+    
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 21px;
+
+    color: #444444;
+
+    margin: 20px 0px 20px 10px;
+    width: 200px;
+}
+
+#btn-marcar-consulta {
+    background: #49B4BB;
+    border-radius: 4px;
+    padding-right: 15px;
+    margin: 20px 10px 20px 0px;   
+    width: 160px;
+    height: 30px;
+
+    color: #FFF;
+    border: none;
+    
+}
+
+
+th {
+    text-transform: uppercase;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 14px;
+
+    text-transform: uppercase;
+
+    color: #A8A8A8;
+}
+
+.column-header {
+    width: 30%;
+}
+
+#table-body td {
+    color: #444;
+}
+
+#btnDesmarcar {
+    color: #49B4BB;
+    width: 150px;
+} 
