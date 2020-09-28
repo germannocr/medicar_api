@@ -105,9 +105,15 @@ def retrieve_current_date_and_time():
     return current_date, current_time
 
 
-def remove_past_horario_from_list(retrieved_agendas_list: list, existent_consultas_list: list,
-                                  current_time: datetime.time):
+def remove_invalid_horario_from_list(
+        retrieved_agendas_list: list,
+        existent_consultas_list: list,
+        current_time: datetime.time,
+        current_date: datetime.date
+):
 
+    #TODO: Corrigir bug onde horários que já possuíam consultas marcadas por outros clientes aparecem disponíveis,
+    # ou seja, só não listava horários ocupados pelo próprio cliente.
     for current_agenda in retrieved_agendas_list:
         horario_list = []
         for current_consulta in existent_consultas_list:
@@ -116,13 +122,14 @@ def remove_past_horario_from_list(retrieved_agendas_list: list, existent_consult
                     and current_consulta.medico == current_agenda.medico:
                 current_agenda.horarios.remove(current_consulta.horario)
 
-        for current_horario in current_agenda.horarios:
-            if current_horario > current_time:
-                horario_list.append(current_horario)
+        if current_date == current_agenda.dia:
+            for current_horario in current_agenda.horarios:
+                if current_horario > current_time:
+                    horario_list.append(current_horario)
 
-        current_agenda.horarios = horario_list
+            current_agenda.horarios = horario_list
 
-        if len(horario_list) == 0:
-            retrieved_agendas_list = retrieved_agendas_list.exclude(id=current_agenda.id)
+            if len(horario_list) == 0:
+                retrieved_agendas_list = retrieved_agendas_list.exclude(id=current_agenda.id)
 
     return retrieved_agendas_list

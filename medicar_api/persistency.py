@@ -1,6 +1,6 @@
 import datetime
 
-from medicar_api.mappers import retrieve_current_date_and_time, remove_past_horario_from_list
+from medicar_api.mappers import retrieve_current_date_and_time, remove_invalid_horario_from_list
 from medicar_api.models import (
     Especialidade, Medico, Consulta, Agenda
 )
@@ -61,10 +61,11 @@ def retrieve_agendas_list(query_params: dict = None):
 
     existent_consultas_list = Consulta.objects.filter(dia__gte=current_date, horario__gte=current_time).all()
 
-    retrieved_agendas_list = remove_past_horario_from_list(
+    retrieved_agendas_list = remove_invalid_horario_from_list(
         retrieved_agendas_list=retrieved_agendas_list,
         existent_consultas_list=existent_consultas_list,
-        current_time=current_time
+        current_time=current_time,
+        current_date=current_date
     )
 
     return retrieved_agendas_list

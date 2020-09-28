@@ -26,7 +26,6 @@ class AgendaForm(forms.ModelForm):
         return self.cleaned_data['dia']
 
 
-
 class AgendaAdmin(admin.ModelAdmin):
     form = AgendaForm
     list_display = ('medico', 'dia', 'horarios')

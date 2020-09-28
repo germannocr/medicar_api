@@ -29,6 +29,7 @@ class ConsultaSerializer(serializers.ModelSerializer):
 
 class AgendaSerializer(serializers.ModelSerializer):
     medico = MedicoSerializer(many=False, read_only=True)
+    horarios = serializers.ListField(child=serializers.TimeField(format='%H:%M'))
 
     class Meta:
         model = Agenda
