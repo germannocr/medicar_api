@@ -1,0 +1,134 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#logo {
+    position: relative;
+    display: block;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    margin-left: 0px;
+    width: 180.74px;
+    height: 50px;
+}
+
+.card-container {
+    border: none;
+    width: 400px;
+    margin: 0 auto;
+}
+
+#register-title {
+    width: 117px;
+    height: 21px;
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 21px;
+
+    color: #444444;
+}
+
+
+.form-group input {
+    margin-top: 20px;
+    border-color: #A8A8A8;
+}
+
+input {
+    padding-left: 5px;
+}
+
+input::placeholder {
+    padding-left: 5px;
+}
+
+input::placeholder {
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 15px;
+    display: flex;
+    align-items: center;
+
+    color: #A8A8A8;
+}
+
+
+.btn-group {
+    margin-top: 20px;
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-light{
+
+    display: block;
+
+    color: #49B4BB;
+    background-color: #FFF;
+    border-color: #FFF;
+    
+    width: 180px;
+    padding-top: 8px;
+    text-align: center;    
+}
+
+.btn-light:hover {
+    text-decoration: none;
+    background-color: #D9F1F3;
+    transition: 0.4s;
+}
+
+.btn-green {
+    background-color: #49B4BB;
+    color: #FFF;
+    width: 180px;
+}
+
+.btn-green:hover {
+    background-color: #90D3D7;
+    transition: 0.4s;
+}
+
+.button {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+
+    border-radius: 8px;
+    height: 40px;
+}   
+
+.alert-success {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#back-to-login {
+    margin: 0 auto;
+    width: 70%;
+    margin-top: 10px;
+}
+
+#back-to-login a {
+    width: 230px;
+    padding: 10px 0;
+    display: block;
+    margin: 0 auto; 
+    text-align: center;
+}
+
+#back-to-login a:hover {
+    text-decoration: none;
+    background-color: #6AC2C8;
+}

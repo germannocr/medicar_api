@@ -1,0 +1,61 @@
+<div class="modal-header">
+  <h4 class="modal-title">Nova Consulta</h4>
+</div>
+<div class="modal-body">
+  <form id="nova-consulta-form" #consultaForm="ngForm" [formGroup]="createConsultaForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="none" class="select-field">
+      <select matNativeControl required (change)="changeEspecialidade($event, consultaForm)" class="select-option">
+        <option value="" hidden>
+          Especialidade
+        </option>
+        <option *ngFor="let especialidade of especialidadeList" [value]="especialidade.id">
+          {{ especialidade.nome }}
+        </option>
+      </select>
+    </mat-form-field> 
+
+    <mat-form-field appearance="none" class="select-field">
+      <select matNativeControl required class="select-option" (change)="changeMedico($event, consultaForm)" [disabled]="medicoList.length == 0">
+        <option value="" hidden>
+          Médico
+        </option>
+        <option *ngFor="let medico of medicoList" [value]="medico.id">
+          {{ medico.nome }}
+        </option>
+      </select>
+    </mat-form-field> 
+
+    <mat-form-field appearance="none" class="select-field">
+      <select matNativeControl required (change)="changeDia($event, consultaForm)" class="select-option" [disabled]="agendaList.length == 0">
+        <option value="" hidden>
+          Data
+        </option>
+        <option *ngFor="let agenda of agendaList" [value]="agenda.dia">
+          {{ agenda.dia }}
+        </option>
+      </select>
+    </mat-form-field> 
+
+    <mat-form-field appearance="none" class="select-field">
+      <select matNativeControl required (change)="changeHorario($event)" class="select-option" [disabled]="horarioList.length == 0">
+        <option value="" hidden>
+          Horário
+        </option>
+        <option *ngFor="let horario of horarioList" [value]="horario">
+          {{ horario }}
+        </option>
+      </select>
+    </mat-form-field> 
+    
+    <div class="btn-group">
+      <a href="/home" class="button btn-light" (click)="activeModal.close('Close click')">
+        Cancelar
+      </a>
+      <div class="form-group">
+        <button class="btn button btn-green" id="submit-button" [disabled]="!completedForm">
+          Submit
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

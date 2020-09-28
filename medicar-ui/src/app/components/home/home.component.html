@@ -1,0 +1,58 @@
+<nav id="navbar">
+    <a href="/home">
+      <img 
+      id="logo"
+      src="../../../assets/images/logo.png"
+      />
+    </a>
+    <ul id="navbar-nav">
+      <li class="nav-item">
+        <a href="/" id="profile-name" class="item-link" routerLink="profile">Nome usuário</a>
+      </li>
+      <li class="nav-item">
+        <a href="" id="logout" class="item-link" (click)="logout()">Desconectar</a>
+      </li>
+    </ul>
+</nav>
+  <div class="container">
+    <div class="card list-consulta">
+      <div id="consulta-header">
+        <h1 id="table-title">Consulta Clínica</h1>
+        <button type="button" id="btn-marcar-consulta" (click)="openAddConsultaModal()">
+          <svg id="plus-icon" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+          </svg>
+          Nova consulta
+        </button>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped table-borderless">
+            <thead id="table-head">
+              <tr>
+                <th class="column-header" scope="col">Especialidade</th>
+                <th class="column-header" scope="col">Profissional</th>
+                <th class="column-header" scope="col">Data</th>
+                <th class="column-header" scope="col">Hora</th>
+                <th class="column-header" scope="col"></th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <tr *ngFor="let consulta of consultaList">
+                <td>{{consulta.medico.especialidade.nome}}</td>
+                <td>{{consulta.medico.nome}}</td>
+                <td>{{consulta.dia}}</td>
+                <td>{{consulta.horario}}</td>
+                <td class="desmarcarColumn">
+                  <button type="button" id="btnDesmarcar" class="btn" (click)="deleteConsulta(consulta)">
+                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                    Desmarcar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
