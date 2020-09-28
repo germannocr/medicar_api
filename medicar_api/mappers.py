@@ -109,27 +109,36 @@ def remove_invalid_horario_from_list(
         retrieved_agendas_list: list,
         existent_consultas_list: list,
         current_time: datetime.time,
-        current_date: datetime.date
+        current_date: datetime.date,
+        user_id: int
 ):
-
-    #TODO: Corrigir bug onde horários que já possuíam consultas marcadas por outros clientes aparecem disponíveis,
-    # ou seja, só não listava horários ocupados pelo próprio cliente.
+    filtered_agenda_list = []
     for current_agenda in retrieved_agendas_list:
         horario_list = []
         for current_consulta in existent_consultas_list:
+            # Removes doctors' schedules already filled by other customers.
             if current_consulta.horario in current_agenda.horarios \
                     and current_consulta.dia == current_agenda.dia \
                     and current_consulta.medico == current_agenda.medico:
                 current_agenda.horarios.remove(current_consulta.horario)
 
+            # Removes customer hours already filled by other Consultas.
+            if current_consulta.horario in current_agenda.horarios \
+                    and current_consulta.dia == current_agenda.dia \
+                    and current_consulta.created_by_user == user_id:
+                current_agenda.horarios.remove(current_consulta.horario)
+
+        # Removes past times.
         if current_date == current_agenda.dia:
             for current_horario in current_agenda.horarios:
                 if current_horario > current_time:
                     horario_list.append(current_horario)
-
             current_agenda.horarios = horario_list
 
+            # If all times on an Agenda are already filled, the Agenda is not listed.
             if len(horario_list) == 0:
                 retrieved_agendas_list = retrieved_agendas_list.exclude(id=current_agenda.id)
+            else:
+                filtered_agenda_list.append(current_agenda)
 
-    return retrieved_agendas_list
+    return filtered_agenda_list

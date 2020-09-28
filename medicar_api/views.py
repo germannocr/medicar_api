@@ -247,11 +247,12 @@ def retrieve_agendas(request):
     #Returns:
         [NO CONTENT]
     """
+    user = request.user
     query_params = request.query_params
     validate_request_query_params(query_params=query_params)
     query_params_filters = map_agenda_query_params(query_params=query_params)
     try:
-        retrieved_agendas_list = retrieve_agendas_list(query_params_filters)
+        retrieved_agendas_list = retrieve_agendas_list(query_params=query_params_filters, user_id=user.id)
         serialized_response = AgendaSerializer(retrieved_agendas_list, many=True)
         response = map_get_agenda_response(serialized_response=serialized_response)
         return response

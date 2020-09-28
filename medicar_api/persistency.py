@@ -54,7 +54,7 @@ def retrieve_medicos_list(query_params: dict = None):
     return retrieved_medicos_list
 
 
-def retrieve_agendas_list(query_params: dict = None):
+def retrieve_agendas_list(user_id: int, query_params: dict = None):
     current_date, current_time = retrieve_current_date_and_time()
 
     retrieved_agendas_list = Agenda.objects.filter(dia__gte=current_date, **query_params).all().order_by("dia")
@@ -65,7 +65,8 @@ def retrieve_agendas_list(query_params: dict = None):
         retrieved_agendas_list=retrieved_agendas_list,
         existent_consultas_list=existent_consultas_list,
         current_time=current_time,
-        current_date=current_date
+        current_date=current_date,
+        user_id=user_id
     )
 
     return retrieved_agendas_list
