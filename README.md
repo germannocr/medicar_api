@@ -22,6 +22,8 @@ App, made in Django and Django Rest in Backend and Angular in Frontend , for cre
  
  #### Example: Authorization: JWT <user_token>
  #### Available URL's:
+  - admin/ - Available via browser only. Administrative interface for creating Especialidade, Medico and Agenda objects.
+    - For the "horarios" field in the agenda creation, as it is a list of times, it is enough that the user passes in the required field something like: "14:00, 21:00", without quotes.
   - registration/ - POST -> It allows the creation of new users in the system.
   - login/ - POST -> It allows the login of existing users, through username / email and password.
  
