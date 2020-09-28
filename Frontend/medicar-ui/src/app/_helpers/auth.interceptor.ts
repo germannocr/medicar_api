@@ -1,8 +1,10 @@
-import { HttpHeaders, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 
 import { TokenStorageService } from '../_services/token-storage.service';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 const TOKEN_HEADER_KEY = 'Authorization';
 
@@ -21,7 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
       });
       authReq = req.clone({headers});
     }
-    return next.handle(authReq);
+    return next.handle(authReq)
   }
 }
 

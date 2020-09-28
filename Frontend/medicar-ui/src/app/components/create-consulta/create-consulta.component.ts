@@ -38,7 +38,6 @@ export class CreateConsultaComponent{
   }
 
   onSubmit() {
-    console.log(this.createConsultaForm.value);
     this.consulta = this.createConsultaForm.value;
     this.saveConsulta();
   }
